@@ -1,0 +1,236 @@
+/* DayPin Header — two-row frameless title bar.
+
+   Drag strategy (Tauri 2.11.5 semantics, verified from tauri crate source):
+   • <header> carries data-tauri-drag-region="deep" → the whole header subtree
+     is draggable on blank areas (topBar, dateRow, gaps, padding).
+   • Interactive elements (button, input, [role=button], [tabindex]) WITHOUT
+     the attribute automatically block drag → all our buttons stay clickable.
+   • The DatePicker popover root carries data-tauri-drag-region="false" so
+     interacting with the open calendar never drags the window.
+
+   ┌───────────────────────────────────────────────────┐
+   │                                           📌 − ✕ │  ← topBar: blank drags
+   │  ←           今天       →                          │  ← dateRow: blank drags
+   │           9月2日 · 星期三                          │     dateBtn = clickable, not drag
+   └───────────────────────────────────────────────────┘
+*/
+
+.header {
+  position: relative; /* anchors DatePicker popover */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 2px;
+}
+
+/* ========== Top bar — buttons right, rest drags ========== */
+
+.topBar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1px;
+  height: 28px;
+  padding-right: 2px;
+}
+
+/* 铃铛（提醒入口）钉在最左，其余窗口按钮仍在右侧 */
+.bellBtn {
+  margin-right: auto;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.bellBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.bellBtn:active {
+  background: var(--bg-hover);
+  transform: scale(0.95);
+}
+
+.winBtn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.winBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.winBtn:active {
+  background: var(--bg-hover);
+  transform: scale(0.95);
+}
+
+.pinActive {
+  color: #007aff;
+}
+
+.pinActive:hover {
+  color: #007aff;
+  background: rgba(0, 122, 255, 0.10);
+}
+
+.close:hover {
+  background: rgba(255, 59, 48, 0.18);
+  color: #ff3b30;
+}
+
+/* ========== Date row — programmatic drag on blank areas ========== */
+
+.dateRow {
+  display: flex;
+  justify-content: space-between;   /* chevrons pinned to edges, dateBtn floats center */
+  align-items: center;
+  gap: 10px;
+  height: 36px;
+  padding: 0 4px;
+  user-select: none;
+  cursor: default;
+}
+
+.chevron {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-button);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.chevron:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.chevron:active {
+  background: var(--bg-hover);
+  transform: scale(0.95);
+}
+
+/* ========== dateBtn: TODAY state (column, centered but NOT stretching) ========== */
+
+.dateBtn {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 4px 12px;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.dateBtn:hover {
+  background: var(--bg-hover);
+}
+
+.dateBtn:active {
+  background: var(--bg-hover);
+}
+
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  white-space: nowrap;
+}
+
+.caption {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.mainDate {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dot {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+/* ========== dateBtn: OFF-TODAY state (row, space-between) ========== */
+
+.dateBtnOffToday {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-align: left;
+  width: auto;
+}
+
+.dateBtnOffToday .dateInfo {
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.dateBtnOffToday .mainDate {
+  font-size: 14px;
+}
+
+/* ========== "回到今天" pill ========== */
+
+.todayPill {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #007aff;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.todayPill:hover {
+  background: #0a66d6;
+}
+
+.todayPill:active {
+  background: #0062cc;
+  transform: scale(0.97);
+}

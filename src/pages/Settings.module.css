@@ -1,0 +1,311 @@
+.page {
+  padding: var(--space-md) var(--space-md) 60px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.section {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-popover);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-aux);
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 8px 0 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.label {
+  font-size: var(--fs-aux);
+  color: var(--text-primary);
+}
+
+.themeGroup {
+  display: flex;
+  gap: 4px;
+}
+
+.themeBtn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: var(--radius-button);
+  color: var(--text-secondary);
+  transition: background var(--transition), color var(--transition);
+}
+
+.themeBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.themeBtnActive {
+  background: rgba(0, 122, 255, 0.12);
+  color: #007aff;
+  font-weight: 600;
+}
+
+.shortcutRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.shortcutCtl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kbd {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* 等待录入状态：呼吸提示 */
+.kbdRecording {
+  color: #007aff;
+  border-color: rgba(0, 122, 255, 0.5);
+  animation: kbdPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes kbdPulse {
+  0%,
+  100% {
+    border-color: rgba(0, 122, 255, 0.5);
+  }
+  50% {
+    border-color: rgba(0, 122, 255, 0.15);
+  }
+}
+
+.shortcutError {
+  font-size: 11px;
+  color: var(--status-overdue);
+  margin: 4px 0 0;
+  text-align: right;
+}
+
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.toggleOn {
+  background: rgba(0, 122, 255, 0.25);
+  border-color: #007aff;
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  transition: transform var(--transition), background var(--transition);
+}
+
+.toggleOn .toggleKnob {
+  transform: translateX(18px);
+  background: #007aff;
+}
+
+.hint {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ---- 数据 section ---- */
+
+.dataBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: var(--radius-button);
+  transition: background var(--transition), color var(--transition);
+}
+
+.dataBtn:hover {
+  background: var(--bg-hover);
+}
+
+.dataBtn:active {
+  transform: scale(0.97);
+}
+
+.dataHint {
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding: 4px 0 6px;
+}
+
+/* ---- toast ---- */
+
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 60;
+  max-width: 85%;
+  padding: 8px 14px;
+  font-size: var(--fs-aux);
+  color: #fff;
+  background: rgba(40, 40, 45, 0.92);
+  border-radius: var(--radius-popover);
+  box-shadow: var(--shadow-popover);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: toast-in var(--transition);
+}
+
+.toastErr {
+  background: rgba(200, 48, 42, 0.95);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ---- restore confirm dialog ---- */
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  animation: overlay-in var(--transition);
+}
+
+.confirmCard {
+  width: calc(100% - 48px);
+  max-width: 300px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-popover);
+  box-shadow: var(--shadow-popover);
+  padding: 16px;
+}
+
+.confirmTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.confirmText {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.confirmWarn {
+  font-size: 11px;
+  color: #c8302a;
+  background: rgba(200, 48, 42, 0.08);
+  border-radius: var(--radius-button);
+  padding: 8px 10px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btnGhost,
+.btnDanger {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-button);
+  transition: background var(--transition), opacity var(--transition);
+}
+
+.btnGhost {
+  color: var(--text-secondary);
+  background: var(--bg-input);
+}
+
+.btnGhost:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btnDanger {
+  color: #fff;
+  background: #c8302a;
+}
+
+.btnDanger:hover {
+  background: #b02a25;
+}
+
+.btnGhost:disabled,
+.btnDanger:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

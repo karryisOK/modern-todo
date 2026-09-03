@@ -1,0 +1,32 @@
+# 仓库内统一使用 LF 换行（跨平台构建：Windows / macOS / Linux CI 一致）
+* text=auto eol=lf
+
+# 明确的文本类型
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.rs text eol=lf
+*.toml text eol=lf
+*.lock text eol=lf
+
+# Windows 专用脚本保留 CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 二进制文件不做换行转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.icns binary
+*.exe binary
+*.dll binary
+*.db binary

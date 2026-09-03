@@ -1,0 +1,140 @@
+/* 昨日未完成任务 → 启动弹窗 */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.32);
+  border-radius: var(--radius-window);
+}
+
+.modal {
+  position: relative;
+  width: min(300px, calc(100% - 48px));
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-overlay);
+  box-shadow: var(--shadow-popover);
+}
+
+.icon {
+  font-size: 26px;
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+}
+
+.title {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--fs-task);
+  font-weight: var(--fw-title);
+  color: var(--text-primary);
+}
+
+.text {
+  margin: 0 0 var(--space-md);
+  font-size: var(--fs-aux);
+  line-height: var(--lh-normal);
+  color: var(--text-secondary);
+}
+
+.text strong {
+  color: var(--status-overdue);
+  font-weight: 600;
+}
+
+/* 按日期分组的未完成清单 */
+.dateList {
+  list-style: none;
+  width: 100%;
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-aux);
+  color: var(--text-secondary);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  padding: 5px 10px;
+}
+
+.dateOld {
+  color: var(--status-overdue);
+}
+
+.count {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.btnGhost,
+.btnPrimary {
+  flex: 1;
+  font-size: var(--fs-aux);
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: var(--radius-button);
+  transition: background var(--transition), filter var(--transition);
+}
+
+.btnGhost {
+  color: var(--text-secondary);
+  background: var(--bg-input);
+}
+
+.btnGhost:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btnPrimary {
+  color: #fff;
+  background: var(--status-doing);
+}
+
+.btnPrimary:hover {
+  filter: brightness(1.05);
+}
+
+.btnClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1;
+  border-radius: var(--radius-button);
+  transition: background var(--transition);
+}
+
+.btnClose:hover {
+  background: var(--bg-hover);
+}

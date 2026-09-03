@@ -1,0 +1,40 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xs) var(--space-md);
+}
+
+.label {
+  font-size: var(--fs-aux);
+  color: var(--text-secondary);
+  line-height: var(--lh-tight);
+}
+
+.done {
+  color: var(--status-done);
+  font-weight: 600;
+}
+
+.sep,
+.total {
+  color: var(--text-secondary);
+}
+
+.text {
+  color: var(--text-secondary);
+}
+
+.track {
+  height: var(--progress-height);
+  background: var(--bg-input);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--status-done);
+  border-radius: var(--radius-pill);
+  transition: width var(--transition);
+}

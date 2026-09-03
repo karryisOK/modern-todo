@@ -1,0 +1,172 @@
+.popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 260px;
+  padding: var(--space-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-overlay);
+  box-shadow: var(--shadow-popover);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 2px 8px;
+}
+
+.title {
+  font-size: var(--fs-aux);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.titleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--fs-aux);
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: background var(--transition);
+}
+
+.titleBtn:hover {
+  background: var(--bg-hover);
+}
+
+.quickList {
+  padding: 4px 0 8px;
+}
+
+.quickNav {
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.quickNav:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.quickGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  padding: 4px 0;
+}
+
+.quickItem {
+  font-size: 12px;
+  color: var(--text-primary);
+  padding: 6px 0;
+  border-radius: 6px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.quickItem:hover {
+  background: var(--bg-hover);
+}
+
+.quickActive {
+  background: rgba(0, 122, 255, 0.12);
+  color: #007aff;
+  font-weight: 600;
+}
+
+.monthNav {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  border-radius: var(--radius-button);
+  transition: background var(--transition);
+}
+
+.monthNav:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.weekday {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 2px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.cell {
+  position: relative;
+  height: 32px;
+  font-size: var(--fs-aux);
+  color: var(--text-primary);
+  border-radius: var(--radius-hover);
+  transition: background var(--transition);
+}
+
+.cell:hover {
+  background: var(--bg-hover);
+}
+
+.otherMonth {
+  color: var(--text-secondary);
+  opacity: 0.4;
+}
+
+.selected {
+  background: rgba(0, 122, 255, 0.12);
+  color: #007aff;
+  font-weight: 600;
+}
+
+.selected:hover {
+  background: rgba(0, 122, 255, 0.18);
+}
+
+.todayDot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #007aff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.selected .todayDot {
+  display: none;
+}

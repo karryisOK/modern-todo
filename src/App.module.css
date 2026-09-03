@@ -1,0 +1,59 @@
+.pageArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nav {
+  display: flex;
+  align-items: stretch;
+  max-height: 64px;
+  padding: 6px 0 8px;
+  gap: 2px;
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+  transition:
+    max-height 0.26s ease,
+    padding 0.26s ease,
+    opacity 0.22s ease,
+    transform 0.26s ease,
+    border-color 0.26s ease;
+}
+
+/* 鼠标不在窗口内且无焦点输入时：收起 Tab 栏，把空间让给任务列表 */
+:global(.app-shell:not(:hover):not(:focus-within)) .nav {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-color: transparent;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+.navBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border-radius: var(--radius-button);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  transition: color var(--transition), background var(--transition);
+}
+
+.navBtn:hover {
+  color: var(--text-primary);
+}
+
+.navBtnActive {
+  color: #007aff;
+}
+
+.navBtnActive:hover {
+  color: #007aff;
+}

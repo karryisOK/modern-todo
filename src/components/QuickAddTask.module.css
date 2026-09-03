@@ -1,0 +1,54 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: var(--task-height);
+  /* 预留收起动画的高度上限；收起时归零 */
+  max-height: 56px;
+  margin-top: var(--space-sm);
+  /* 与底部 Tab 栏拉开一点距离 */
+  margin-bottom: var(--space-sm);
+  padding: 0 var(--space-sm);
+  background: var(--bg-input);
+  /* 胶囊造型 */
+  border-radius: 999px;
+  overflow: hidden;
+  transition:
+    background var(--transition),
+    max-height 0.24s ease,
+    margin 0.24s ease,
+    opacity 0.2s ease,
+    transform 0.24s ease;
+}
+
+.row:focus-within {
+  background: var(--bg-elevated);
+}
+
+/* 鼠标不在窗口内且无焦点输入时：收起输入条，把空间让给任务列表 */
+:global(.app-shell:not(:hover):not(:focus-within)) .row {
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+.icon {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.input {
+  flex: 1;
+  font-size: var(--fs-task);
+  color: var(--text-primary);
+  user-select: text;
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+}

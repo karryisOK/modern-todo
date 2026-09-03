@@ -1,0 +1,58 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-task-gap);
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 2px;
+  padding-bottom: var(--space-xs);
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-section) var(--space-md);
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: var(--fs-task);
+  color: var(--text-secondary);
+}
+
+.emptyHint {
+  font-size: var(--fs-aux);
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Pointer-based drag & drop (Phase 2 — WebView2-safe) */
+.dragWrapper {
+  cursor: grab;
+  position: relative;
+  touch-action: none;
+  will-change: transform;
+  transition: background 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  border-radius: var(--radius-hover);
+}
+
+.dragWrapper:active {
+  cursor: grabbing;
+}
+
+/* 被拖动的任务：高亮浮起（transform 由 JS 内联驱动，1:1 跟手） */
+.dragging {
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-popover);
+  border: 1px solid rgba(0, 122, 255, 0.35);
+  opacity: 1;
+}
+
+/* 非拖动项略微压低，衬托出被拖项 */
+.list:has(.dragging) .dragWrapper:not(.dragging) {
+  opacity: 0.5;
+}
