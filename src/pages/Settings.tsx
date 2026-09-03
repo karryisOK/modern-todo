@@ -16,7 +16,7 @@ import {
   validateBackupJson,
   type BackupFile,
 } from "../services/backup";
-import { DEFAULT_ACCEL, eventToAccel, formatAccel } from "../services/shortcut";
+import { defaultAccel, eventToAccel, formatAccel, isMac } from "../services/shortcut";
 import styles from "./Settings.module.css";
 
 interface PendingImport {
@@ -77,7 +77,7 @@ export function Settings() {
 
   const handleResetShortcut = async () => {
     setRecording(false);
-    await applyNewShortcut(DEFAULT_ACCEL);
+    await applyNewShortcut(defaultAccel());
   };
 
   const showToast = (msg: string, kind: "ok" | "err") => {
@@ -213,7 +213,7 @@ export function Settings() {
           <div className={styles.shortcutCtl}>
             {recording ? (
               <kbd className={`${styles.kbd} ${styles.kbdRecording}`}>
-                按下新的快捷键…（Esc 取消）
+                {isMac ? "按下新的快捷键…（⎋ 取消）" : "按下新的快捷键…（Esc 取消）"}
               </kbd>
             ) : (
               <kbd className={styles.kbd}>{formatAccel(shortcut)}</kbd>

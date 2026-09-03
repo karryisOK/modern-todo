@@ -6,7 +6,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { enable, disable } from "@tauri-apps/plugin-autostart";
 import * as settingsDb from "../database/settings";
-import { DEFAULT_ACCEL } from "../services/shortcut";
+import { defaultAccel } from "../services/shortcut";
 
 export type ThemeMode = "light" | "dark" | "system";
 
@@ -39,7 +39,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   theme: "system",
   alwaysOnTop: false,
   autostart: false,
-  shortcut: DEFAULT_ACCEL,
+  shortcut: defaultAccel(),
   reminder: null,
   shortcutError: null,
   loaded: false,
@@ -51,7 +51,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         settingsDb.getSetting<ThemeMode>("theme", "system"),
         settingsDb.getSetting<boolean>("always_on_top", false),
         settingsDb.getSetting<boolean>("autostart", false),
-        settingsDb.getSetting<string>("shortcut", DEFAULT_ACCEL),
+        settingsDb.getSetting<string>("shortcut", defaultAccel()),
         settingsDb.getSetting<ReminderConfig | null>("reminder", null),
       ]);
       set({ theme, alwaysOnTop, autostart, shortcut, reminder, loaded: true });
