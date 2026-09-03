@@ -401,13 +401,22 @@ fn apply_macos_transparent_webview(app: &tauri::AppHandle) {
     };
     let _ = win.with_webview(|webview| unsafe {
         let wk = webview.inner() as *mut Object;
+        if wk.is_null() {
+            return;
+        }
 
         // WKWebView 不绘制自身底色（KVC 私有开关，Apple 官方透明方案）
         let no: *mut Object = msg_send![class!(NSNumber), numberWithBool: 0u8];
         let _: () = msg_send![wk, setValue: no forKey: "drawsBackground"];
 
-        // 承载网页的滚动容器：透明背景 + 强制悬浮式滚动条（不预留轨道槽）
-        let sv: *mut Object = msg_send![wk, scrollView];
+        // 注意：macOS 的 WKWebView 没有公开 scrollView 属性（那是 iOS API），
+        // 直接发 scrollView 消息会崩溃。承载网页的 WKScrollView 是其第一个子视图。
+        let subs: *mut Object = msg_send![wk, subviews];
+        let sv: *mut Object = msg_send![subs, firstObject];
+        if sv.is_null() {
+            return;
+        }
+        // 滚动容器：透明背景 + 强制悬浮式滚动条（不预留白色轨道槽）
         let _: () = msg_send![sv, setDrawsBackground: 0u8];
         let clear: *mut Object = msg_send![class!(NSColor), clearColor];
         let _: () = msg_send![sv, setBackgroundColor: clear];

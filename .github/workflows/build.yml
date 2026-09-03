@@ -19,10 +19,13 @@ jobs:
         include:
           - platform: windows-latest
             rust-target: "" # Windows 原生 x64
+            bundle-target: nsis # 只出 NSIS 安装器，跳过会失败的 MSI(WiX)
           - platform: macos-latest
             rust-target: aarch64-apple-darwin # Apple Silicon (M1/M2/M3)
+            bundle-target: dmg
           - platform: macos-13
             rust-target: x86_64-apple-darwin # Intel Mac
+            bundle-target: dmg
     runs-on: ${{ matrix.platform }}
 
     steps:
@@ -65,7 +68,10 @@ jobs:
             > macOS 首次打开请右键 → 打开，或执行 `xattr -cr /Applications/摩登待办.app`。
           releaseDraft: true
           prerelease: false
-          args: ${{ matrix.rust-target && format('--target {0}', matrix.rust-target) || '' }}
+          # Windows 只打 NSIS（跳过会失败的 MSI/WiX）；macOS 只打 dmg。
+          args: >-
+            --bundles ${{ matrix.bundle-target }}
+            ${{ matrix.rust-target && format('--target {0}', matrix.rust-target) }}
 
       # 手动触发（无 tag）时，把安装包作为 workflow Artifact 上传以便下载
       - name: Upload installers (manual run)
