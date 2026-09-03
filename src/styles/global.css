@@ -12,6 +12,9 @@ body,
 #root {
   height: 100%;
   margin: 0;
+  /* 必须显式透明：WKWebView(macOS) 会把默认根画布画成白色，
+     导致透明窗口的圆角/外边距处透白；WebView2(Windows) 无此问题。 */
+  background: transparent;
 }
 
 body {
