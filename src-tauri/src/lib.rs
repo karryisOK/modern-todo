@@ -387,6 +387,35 @@ fn t_stamp() -> String {
     format!("{secs}")
 }
 
+/// macOS：让 WKWebView 及其承载网页的 NSScrollView 完全透明。
+/// CSS 够不到这两层原生表面——系统「始终显示滚动条」时 NSScrollView 会
+/// 画出白色轨道、WKWebView 默认绘制不透明白底，深色模式下表现为右边缘白条。
+#[cfg(target_os = "macos")]
+fn apply_macos_transparent_webview(app: &tauri::AppHandle) {
+    use objc::runtime::Object;
+    use objc::{class, msg_send, sel, sel_impl};
+    use tauri::Manager;
+
+    let Some(win) = app.get_webview_window("main") else {
+        return;
+    };
+    let _ = win.with_webview(|webview| unsafe {
+        let wk = webview.inner() as *mut Object;
+
+        // WKWebView 不绘制自身底色（KVC 私有开关，Apple 官方透明方案）
+        let no: *mut Object = msg_send![class!(NSNumber), numberWithBool: 0u8];
+        let _: () = msg_send![wk, setValue: no forKey: "drawsBackground"];
+
+        // 承载网页的滚动容器：透明背景 + 强制悬浮式滚动条（不预留轨道槽）
+        let sv: *mut Object = msg_send![wk, scrollView];
+        let _: () = msg_send![sv, setDrawsBackground: 0u8];
+        let clear: *mut Object = msg_send![class!(NSColor), clearColor];
+        let _: () = msg_send![sv, setBackgroundColor: clear];
+        // NSScrollerStyleOverlay = 1
+        let _: () = msg_send![sv, setScrollerStyle: 1isize];
+    });
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -440,6 +469,10 @@ pub fn run() {
             set_global_shortcut
         ])
         .setup(|app| {
+            // macOS: kill the native white webview background / scrollbar track.
+            #[cfg(target_os = "macos")]
+            apply_macos_transparent_webview(app.handle());
+
             // ---- Tray menu ----
             let open_item =
                 MenuItem::with_id(app, "show_main", "打开摩登待办", true, None::<&str>)?;

@@ -25,3 +25,7 @@ tauri-plugin-single-instance = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "sqlite"] }
+
+# macOS only: make WKWebView/NSScrollView transparent for the frameless window.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc = "0.2"
