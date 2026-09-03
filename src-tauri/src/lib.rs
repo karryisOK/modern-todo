@@ -387,44 +387,13 @@ fn t_stamp() -> String {
     format!("{secs}")
 }
 
-/// macOS：让 WKWebView 及其承载网页的 NSScrollView 完全透明。
-/// CSS 够不到这两层原生表面——系统「始终显示滚动条」时 NSScrollView 会
-/// 画出白色轨道、WKWebView 默认绘制不透明白底，深色模式下表现为右边缘白条。
-#[cfg(target_os = "macos")]
-fn apply_macos_transparent_webview(app: &tauri::AppHandle) {
-    use objc::runtime::Object;
-    use objc::{class, msg_send, sel, sel_impl};
-    use tauri::Manager;
-
-    let Some(win) = app.get_webview_window("main") else {
-        return;
-    };
-    let _ = win.with_webview(|webview| unsafe {
-        let wk = webview.inner() as *mut Object;
-        if wk.is_null() {
-            return;
-        }
-
-        // WKWebView 不绘制自身底色（KVC 私有开关，Apple 官方透明方案）
-        let no: *mut Object = msg_send![class!(NSNumber), numberWithBool: 0u8];
-        let _: () = msg_send![wk, setValue: no forKey: "drawsBackground"];
-
-        // 注意：macOS 的 WKWebView 没有公开 scrollView 属性（那是 iOS API），
-        // 直接发 scrollView 消息会崩溃。承载网页的 WKScrollView 是其第一个子视图。
-        let subs: *mut Object = msg_send![wk, subviews];
-        let sv: *mut Object = msg_send![subs, firstObject];
-        if sv.is_null() {
-            return;
-        }
-        // 滚动容器：透明背景 + 强制悬浮式滚动条（不预留白色轨道槽）
-        let _: () = msg_send![sv, setDrawsBackground: 0u8];
-        let clear: *mut Object = msg_send![class!(NSColor), clearColor];
-        let _: () = msg_send![sv, setBackgroundColor: clear];
-        // NSScrollerStyleOverlay = 1
-        let _: () = msg_send![sv, setScrollerStyle: 1isize];
-    });
-}
-
+/// macOS 透明背景说明：
+/// wry 的 `transparent` 特性（由 tauri.conf.json 的 `"transparent": true` +
+/// `macos-private-api` 启用）已在 WKWebViewConfiguration 初始化时通过
+/// `drawsBackground` KVC key 关闭了 WKWebView 的默认白底——这是 Apple
+/// 官方推荐的透明方案，且 wry 会在 macOS 12+ 上设置 underPageBackgroundColor。
+/// 因此无需在运行时再操作原生 WKWebView/NSScrollView，CSS 的
+/// `background: transparent` + 隐藏滚动条即可达成深色模式下的透明效果。
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -478,10 +447,6 @@ pub fn run() {
             set_global_shortcut
         ])
         .setup(|app| {
-            // macOS: kill the native white webview background / scrollbar track.
-            #[cfg(target_os = "macos")]
-            apply_macos_transparent_webview(app.handle());
-
             // ---- Tray menu ----
             let open_item =
                 MenuItem::with_id(app, "show_main", "打开摩登待办", true, None::<&str>)?;
